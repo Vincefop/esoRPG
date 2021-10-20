@@ -1,4 +1,4 @@
-package fr.rpg.univers;
+package fr.rpg;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
