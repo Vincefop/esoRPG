@@ -1,4 +1,4 @@
-package fr.rpg.individus;
+package fr.rpg.classes;
 
 import java.util.List;
 import java.util.Random;
@@ -8,7 +8,7 @@ import fr.rpg.comportement.Attaque;
 public class Classe {
 	
 	private String nom;
-	private List<Attaque> listAttaque;
+	private List<Attaque> listAttaque; // liste des attaques propres à la classe choisie
 	
 	
 	public Classe() {
@@ -16,18 +16,18 @@ public class Classe {
 	}
 	public Classe(String nom, List<Attaque> listAttaque) {
 		super();
-		this.nom = nom;
-		this.listAttaque = listAttaque;
+		this.setNom(nom);
+		this.setListAttaque(listAttaque);
 	}
 
 	/**
-	 * recuperer une attaque parmis la liste d'attaques  et la renvoie
+	 * recuperer une attaque aléatoire parmis la liste d'attaques  et la renvoie
 	 * @return une attaque aleatoire
 	 */
 	public Attaque getAttaque() {
 		
 		int index = new Random().nextInt(listAttaque.size());
-		Attaque attaque = listAttaque.get(index);
+		Attaque attaque = this.getListAttaque().get(index);
 		return attaque;
 	}
 

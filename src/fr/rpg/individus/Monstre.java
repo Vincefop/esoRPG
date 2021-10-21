@@ -21,8 +21,11 @@ public class Monstre extends AbstractCombattant {
 	@Override
 	/**
 	 * un monstre attaque avec ses dégats
+	 * en fonction de sa chance de toucher
+	 * @param defenseur qui est attaqué
 	 */
 	public void attaquer(Combattant defenseur) {
+		System.out.println(" avec attaque normale (25 degats)");
 		//Ajout de la variable chance de Toucher
 		int alea = new Random().nextInt(100);
 		//si le lanceur a plus de chance de toucher que le chiffre aléatoire il touche
@@ -31,7 +34,8 @@ public class Monstre extends AbstractCombattant {
 			//System.out.println("Le personnage " + defenseur.getNom() + " a perdu " + this.degats + " points de vie." );
 		}//sinon message d'échec et renvoyer 0;
 		else
-			System.out.println(this.getNom() + " a rate son attaque. " + defenseur.getNom() + " n'est pas touche.");
+			System.out.println("Attaque ratee");
+			//System.out.println(this.getNom() + " rate son attaque. " + defenseur.getNom() + " est indemne.");
 		//Si c'est un monstre on récupère ses dégats pour les infliger au defenseur
 		
 	}
@@ -69,7 +73,12 @@ public class Monstre extends AbstractCombattant {
 	public void setChanceDeToucher(int chanceDeToucher) {
 		this.chanceDeToucher = chanceDeToucher;
 	}
+	@Override
+	public String toString() {
+		return "le Monstre " + getNom() + " [degats=" + degats + ", chanceDeToucher=" + chanceDeToucher + ", PointDeVie="
+				+ getPointDeVie() + "]";
+	}
 	
-		
+	
 	
 }

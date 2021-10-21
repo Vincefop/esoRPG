@@ -2,9 +2,9 @@ package fr.rpg.comportement;
 
 import java.util.Random;
 
-import fr.rpg.individus.*;
+import fr.rpg.individus.Combattant;
 
-public class BasiqueAttaque implements Attaque{
+public class AttaqueFeu implements Attaque{
 
 	private String nom;
 	private int chanceDeToucher;
@@ -12,16 +12,15 @@ public class BasiqueAttaque implements Attaque{
 	
 	
 	
-	public BasiqueAttaque() {
-		this(70, 25);
+	public AttaqueFeu() {
+		this(80, 50);
 	}
-	public BasiqueAttaque(int chanceDeToucher, int degats) {
+	public AttaqueFeu(int chanceDeToucher, int degats) {
 		super();
-		this.setNom("BasiqueAttaque");
+		this.setNom("AttaqueFeu");
 		this.setChanceDeToucher(chanceDeToucher);
 		this.setDegats(degats);
 	}
-	
 
 	/**
 	 * Génère un nombre aleatoire compris entre 0 et 100
@@ -80,6 +79,5 @@ public class BasiqueAttaque implements Attaque{
 	public void setChanceDeToucher(int chanceDeToucher) {
 		this.chanceDeToucher = chanceDeToucher;
 	}
-
 
 }

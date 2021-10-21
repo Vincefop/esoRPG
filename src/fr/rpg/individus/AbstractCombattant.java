@@ -10,12 +10,12 @@ public abstract class AbstractCombattant implements Combattant{
 	
 	//CONSTRUCTEURS
 	public AbstractCombattant() {
-		super();
+		this("DefaultName", 100);
 	}
 	public AbstractCombattant(String nom, int pointDeVie) {
 		super();
-		this.pointDeVie = pointDeVie;
-		this.nom = nom;
+		this.setPointDeVie(pointDeVie);
+		this.setNom(nom);
 	}
 	
 	
@@ -34,8 +34,9 @@ public abstract class AbstractCombattant implements Combattant{
 	 * Soustrait aux points de vie les degats passé en params
 	 */
 	public void defendre(int degats) {
-		this.pointDeVie -= degats;
-		System.out.println("Le defenseur " + this.nom + " n'a plus que " + this.pointDeVie + " points de vie.");
+		System.out.println(this.getNom() + " perd " + degats + " points de vie");
+		this.setPointDeVie(this.getPointDeVie()- degats);
+		System.out.println(this.getNom() + " a encore " + this.getPointDeVie() + " points de vie.");
 	}
 
 
@@ -44,7 +45,7 @@ public abstract class AbstractCombattant implements Combattant{
 	 * @return the pointDeVie
 	 */
 	public int getPointDeVie() {
-		return pointDeVie;
+		return this.pointDeVie;
 	}
 	/**
 	 * @param pointDeVie the pointDeVie to set
@@ -56,7 +57,7 @@ public abstract class AbstractCombattant implements Combattant{
 	 * @return the nom
 	 */
 	public String getNom() {
-		return nom;
+		return this.nom;
 	}
 	/**
 	 * @param nom the nom to set
@@ -65,10 +66,10 @@ public abstract class AbstractCombattant implements Combattant{
 		this.nom = nom;
 	}
 	
-//	@Override
-//	public String toString() {
-//		return "Combattant [nom=" + this.nom + ", pointDeVie=" + this.pointDeVie + ", attaque=" + this.degats + "]";
-//	}
+	@Override
+	public String toString() {
+		return "Combattant [nom=" + this.nom + ", pointDeVie=" + this.pointDeVie + "]";
+	}
 	
 	
 }

@@ -1,11 +1,25 @@
 package fr.rpg;
 
-import fr.rpg.univers.*;
+import fr.rpg.univers.Monde;
 
 public class Start {
-
+	
+	
+	
+	
+	/**
+	 * La méthode main qui lance un monde
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		Monde.combat(Monde.personnageFactory(), Monde.monstreFactory());
+		
+		Monde.initClasses();
+		
+		Monde.menu();
+		
+		
+		
+		
 	}
 
 }

@@ -1,20 +1,78 @@
 package fr.rpg.univers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import fr.rpg.Tools;
+import fr.rpg.classes.*;
 import fr.rpg.comportement.*;
-import fr.rpg.individus.Classe;
-import fr.rpg.individus.Combattant;
-import fr.rpg.individus.Monstre;
-import fr.rpg.individus.Personnage;
+import fr.rpg.individus.*;
 
 //Classe static Monde
 //Une classe est considérée comme statique quand toutes ses méthodes et attributs sont statiques
 public class Monde {
 	
+	/*
+	 * On crée un attribut classes qui contient toutes les classes autorisées dans ce monde
+	 */
+	public static Map<String, Classe> classes = new HashMap<>();
+	
+	
+	/**
+	 * J'initialise les classes 
+	 * 
+	 * @return
+	 */
+	public static Map<String, Classe> initClasses() {
+		//GUERRIER
+		//je crée des Attaques
+		BasiqueAttaque basAtt = new BasiqueAttaque();
+		BasiqueAttaque mediumAtt = new BasiqueAttaque(80, 35);
+		mediumAtt.setNom("Attaque Medium");
+		BasiqueAttaque hardAtt = new BasiqueAttaque(25, 80);
+		hardAtt.setNom("Attaque Dur");
+		//Je crée une liste d'attaques et j'ajoute les attaques
+		List<Attaque> listAttGuerrier = new ArrayList<>();
+		listAttGuerrier.add(basAtt);
+		listAttGuerrier.add(mediumAtt);
+		listAttGuerrier.add(hardAtt);
+		//Je crée une classe et j'ajoute la liste d'attaques
+		Classe guerrier = new Classe("Guerrier", listAttGuerrier);
+		classes.put("Guerrier", guerrier);
+		
+		
+		
+		//MAGICIEN
+		//Je crée des Attaques
+		AttaqueFeu attFeu = new AttaqueFeu();
+		AttaqueFeu mediumAttF = new AttaqueFeu(90,60);
+		mediumAttF.setNom("Attaque Feu Medium");
+		//Je crée une liste d'attaques et j'ajoute les attaques
+		List<Attaque> listMage = new ArrayList<>();
+		listMage.add(attFeu);
+		listMage.add(mediumAttF);
+		listMage.add(basAtt);
+		//Je crée une classe et j'ajoute la liste d'attaques
+		Classe mage = new Classe("Mage", listMage);
+		classes.put("Mage", mage);
+		
+		return classes;
+	}
+	
+	/**
+	 * Récupère une classe dans la map en fonction de son nom
+	 * @param nom
+	 * @return une classe
+	 */
+	public static Classe getClasse(String nom) {
+		return classes.get(nom);
+	}
+	
+	//Classe Guerrier = new Classe("Guerrier", );
 	/**
 	* Créer un personnage avec tous ses attributs.
 	* Demande a l'utilisateur d'entrer le nom du personnage.
@@ -27,14 +85,40 @@ public class Monde {
 	// Retourner l'instance du personnage
 		
 		//récupération des attributs
-		String nom = Tools.inputString("Veuillez entrer le nom du personnage : ");
-		//création de la liste d'attaque
-		List<Attaque> listAttaque = new ArrayList<>();
-		listAttaque.add(new BasiqueAttaque("basique", 50, 25));
-		Classe petitGuerrier = new Classe("petitGuerrier", listAttaque);
-		petitGuerrier.setListAttaque(listAttaque);
+		String nom = Tools.inputString("		Veuillez entrer le nom du personnage : ");
+		System.out.println("		-------------------------------------------------------------------------------------------------------------------");
+		System.out.println(">>>");
+		//Choix de la classe du perso
+		boolean rester = true;
+		String classe = "-1";
+		while(rester) {
+			System.out.println("				Choisissez votre classe : ");
+			System.out.println("				1. Guerrier");
+			System.out.println("				2. Mage");
+			System.out.println("		-------------------------------------------------------------------------------------------------------------------");
+			System.out.println(">>>");
+			int numeroClasse = Tools.inputInt("");
+			switch(numeroClasse) {
+				case 1 : {
+					classe = "Guerrier";
+					rester = false;
+					break;
+				}
+					
+				case 2 : {
+					classe = "Mage";
+					rester = false;
+					break;
+				}
+				default : {
+					System.out.println("chiffre non valide");
+					break;
+				}
+			}
+		}
+		Classe randClasse = getClasse(classe);
 		//creation du personnage
-		Personnage pers = new Personnage(nom, 100, 25, 50, petitGuerrier);
+		Personnage pers = new Personnage(nom, 100, 25, 50, randClasse);
 		
 		return pers;
 	}
@@ -69,8 +153,11 @@ public class Monde {
 		String res="";
 		//Deux listes aléatoires
 		String[] debutNom = {"Chat","Chien","Chaton", "Canard", "Lapin", "Poussin", "Poule"};
+		//sinon on peut faire  : 
+		//List<String> list = Arrays.asList("Chat","Chien","Chaton", "Canard", "Lapin", "Poussin", "Poule");
 		String[] finNom = {" Mechant"," De Feu"," De La Mort", " Du Demon", " Du Jugement Dernier", " Pendragon", " Des Enfers"};
 		
+		List<String> list = Arrays.asList("Chat","Chien","Chaton", "Canard", "Lapin", "Poussin", "Poule");
 		//je récupère deux index au hasard
 		int index1 = new Random().nextInt(debutNom.length);
 		int index2 = new Random().nextInt(finNom.length);
@@ -79,6 +166,35 @@ public class Monde {
 		return res;
 	}
 	
+	/**
+	 * Crée un groupe de monstres
+	 * @param nombre
+	 * @return
+	 */
+	public static List<Combattant> groupeMonstreFactory(int nombre) {
+		//ma liste des résultats
+		List<Combattant> res = new ArrayList<>();
+		//j'en crée nombre fois
+		for(int i=0; i<nombre; i++) {
+			res.add(monstreFactory());
+		}
+		return res;
+	}
+	
+	/**
+	 * Cree un groupe de personnages
+	 * @param nombre
+	 * @return
+	 */
+	public static List<Combattant> groupePersonnageFactory(int nombre){
+		//ma liste des résultats
+		List<Combattant> res = new ArrayList<>();
+		//j'en crée nombre fois
+		for(int i=0; i<nombre; i++) {
+			res.add(personnageFactory());
+		}
+		return res;
+	}
 	
 	/**
 	 * les deux ennemis jouent a tour de rôles
@@ -88,14 +204,15 @@ public class Monde {
 	 */
 	public static void combat(Combattant combattant1, Combattant combattant2){
 		
-		System.out.println("Le COMBAT COMMENCE entre le combattant1 " + combattant1.getNom() + " et le combattant2 " + combattant2.getNom());
+		//PRésentation des combattants
+		System.out.println("Le COMBAT COMMENCE entre " + combattant1 + " et " + combattant2);
 
 		
 		Boolean pileFace = new Random().nextBoolean();
 		if(pileFace) {
-			System.out.println("Le hasard fait que c'est " + combattant1.getNom() + " qui attaque en premier.");
+			System.out.println("Le hasard fait que " + combattant1.getNom() + " attaque en premier.");
 		}else
-			System.out.println("Le hasard fait que c'est " + combattant2.getNom() + " qui attaque en premier.");
+			System.out.println("Le hasard fait que " + combattant2.getNom() + " attaque en premier.");
 		
 		//Variable d'arret du jeu quand un combattant est mort
 		Boolean leJeuContinue = true;
@@ -103,7 +220,7 @@ public class Monde {
 		while(leJeuContinue) {
 			if(pileFace) {
 				//Le personnage attaque le monstre
-				System.out.println(combattant1.getNom() + " ATTAQUE " + combattant2.getNom());
+				System.out.print("\n" + combattant1.getNom() + " ATTAQUE " + combattant2.getNom());
 				combattant1.attaquer(combattant2);
 				//si le monstre est mort on sort
 				if(combattant2.getPointDeVie()<=0) {
@@ -115,7 +232,7 @@ public class Monde {
 				pileFace = false;
 			}else {
 				//le monstre attaque le perso
-				System.out.println(combattant2.getNom() + " ATTAQUE " + combattant1.getNom());
+				System.out.print("\n" + combattant2.getNom() + " ATTAQUE " + combattant1.getNom());
 				combattant2.attaquer(combattant1);
 				//si le perso est mort on sort
 				if(combattant1.getPointDeVie()<=0) {
@@ -128,8 +245,73 @@ public class Monde {
 				pileFace = true;
 			}
 		}
-	}	
+	}
 	
+	
+	/**
+	 * MENU DEROULANT DEBUT DE PARTIE
+	 */
+	public static void menu() {
+		System.out.println("		------------------------------------------------------Bonjour------------------------------------------------------");
+		System.out.println("				Choisir une option : ");
+		System.out.println("				1. Lancer un combat 1v1");
+		System.out.println("				2. Lancer un combat de groupe");
+		System.out.println("				3. One vs World Hardcore Edition");
+		System.out.println("				4. Informations");
+		System.out.println("				5. Exit");
+		System.out.println("		-------------------------------------------------------------------------------------------------------------------");
+		System.out.println(">>>");
+		int option = Tools.inputInt("");
+		switch(option) {
+			case 1 : combat1v1(); break;
+			case 2 : System.out.println("combatGroupe()"); break;
+			case 3 : System.out.println("combat1vWorld"); break;
+			case 4 : System.out.println("Game developped by Vincent Debuisson	"); break;
+			case 5 : System.exit(0);
+			default : {
+				System.out.println("chiffre non valide");
+				menu();
+				break;
+			}
+		}
+		menu();
+	}
+	
+	
+	/**
+	 * La méthode qui lance le jeu 1 contre 1
+	 */
+	public static void combat1v1() {
+		
+		System.out.println("				Bienvenu aux combats 1 v 1");
+		System.out.println("		-------------------------------------------------------------------------------------------------------------------");
+		
+		Monde.combat(Monde.personnageFactory(), Monde.monstreFactory());
+		
+	}
+	
+	/**
+	 * Lance les combats de groupe
+	 */
+	public void combatGroupe() {
+		
+		System.out.println("				Bienvenu aux combats de groupes ");
+		System.out.println("		-------------------------------------------------------------------------------------------------------------------");
+		System.out.println("				Combien de monstres contiendra le groupe adverse ? ");
+		System.out.println("		-------------------------------------------------------------------------------------------------------------------");
+		System.out.println(">>>");
+		int nombreMonstre = Tools.inputInt(null);
+		System.out.println("				Combien de personnages contiendra votre groupe ? ");
+		System.out.println("		-------------------------------------------------------------------------------------------------------------------");
+		System.out.println(">>>");
+		int nombrePerso = Tools.inputInt(null);
+			
+		Groupe mesMonstres = new Groupe(groupeMonstreFactory(nombreMonstre), "Le groupe des monstres");
+		List<Combattant> mesPerso = groupePersonnageFactory(nombrePerso);
+		
+		while(mesMonstres.e)
+		
+	}
 	
 	
 	/**
