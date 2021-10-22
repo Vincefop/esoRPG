@@ -1,7 +1,7 @@
 package fr.rpg.individus;
 
 import fr.rpg.classes.Classe;
-import fr.rpg.comportement.Attaque;
+import fr.rpg.comportement.IAttaque;
 
 public class Personnage extends AbstractCombattant{
 	
@@ -31,9 +31,9 @@ public class Personnage extends AbstractCombattant{
 	 * il utilise une attaque random que sa classe lui permet d'utiliser.
 	 * @param le combattant attaqué
 	 */
-	public void attaquer(Combattant defenseur) {
+	public void attaquer(ICombattant defenseur) {
 		//récupère une attaque random dans la liste de la classe
-		Attaque randAttaque = this.getClasse().getAttaque();
+		IAttaque randAttaque = this.getClasse().getAttaque();
 		System.out.println(" avec " + randAttaque.getNom() + "(" + randAttaque.getDegats() + " degats)");
 		//récupère si ses chances de toucher lui permet des dégats à infliger
 		int degat = randAttaque.lancerAttaque(this, defenseur);

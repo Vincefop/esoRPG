@@ -24,7 +24,7 @@ public class Monstre extends AbstractCombattant {
 	 * en fonction de sa chance de toucher
 	 * @param defenseur qui est attaqué
 	 */
-	public void attaquer(Combattant defenseur) {
+	public void attaquer(ICombattant defenseur) {
 		System.out.println(" avec attaque normale (25 degats)");
 		//Ajout de la variable chance de Toucher
 		int alea = new Random().nextInt(100);

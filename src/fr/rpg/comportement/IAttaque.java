@@ -1,9 +1,10 @@
 package fr.rpg.comportement;
 
-import fr.rpg.individus.Combattant;
+import fr.rpg.individus.ICombattant;
 
-public interface Attaque
+public interface IAttaque
 {
+
 	/**
 	 * Renvoie un int qui sera les dégats effectués du lanceur à la cible
 	 * les dégats dépendent de la chance de toucher et de la puissance de l'attaque choisie
@@ -11,7 +12,7 @@ public interface Attaque
 	 * @param cible
 	 * @return le nombre de dégats
 	 */
-	public int lancerAttaque(Combattant lanceur, Combattant cible);
+	public int lancerAttaque(ICombattant lanceur, ICombattant cible);
 	
 	/**
 	 * Récupère le nom de l'attaque

@@ -1,25 +1,33 @@
 package fr.rpg.univers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Scanner;
 
 import fr.rpg.Tools;
-import fr.rpg.classes.*;
-import fr.rpg.comportement.*;
-import fr.rpg.individus.*;
+import fr.rpg.classes.Classe;
+import fr.rpg.comportement.AttaqueFeu;
+import fr.rpg.comportement.BasiqueAttaque;
+import fr.rpg.comportement.IAttaque;
+import fr.rpg.individus.Groupe;
+import fr.rpg.individus.ICombattant;
+import fr.rpg.individus.Monstre;
+import fr.rpg.individus.Personnage;
 
 //Classe static Monde
 //Une classe est considérée comme statique quand toutes ses méthodes et attributs sont statiques
 public class Monde {
 	
+	
+	//Pour arreter le code à chaque tour pour controler le combat
+	public static Scanner scan = new Scanner(System.in);
 	/*
 	 * On crée un attribut classes qui contient toutes les classes autorisées dans ce monde
 	 */
-	public static Map<String, Classe> classes = new HashMap<>();
+	public static Map<String, Classe> classes = initClasses()	;
 	
 	
 	/**
@@ -28,6 +36,7 @@ public class Monde {
 	 * @return
 	 */
 	public static Map<String, Classe> initClasses() {
+		Map<String, Classe> classes = new HashMap<>();
 		//GUERRIER
 		//je crée des Attaques
 		BasiqueAttaque basAtt = new BasiqueAttaque();
@@ -36,7 +45,7 @@ public class Monde {
 		BasiqueAttaque hardAtt = new BasiqueAttaque(25, 80);
 		hardAtt.setNom("Attaque Dur");
 		//Je crée une liste d'attaques et j'ajoute les attaques
-		List<Attaque> listAttGuerrier = new ArrayList<>();
+		List<IAttaque> listAttGuerrier = new ArrayList<>();
 		listAttGuerrier.add(basAtt);
 		listAttGuerrier.add(mediumAtt);
 		listAttGuerrier.add(hardAtt);
@@ -52,7 +61,7 @@ public class Monde {
 		AttaqueFeu mediumAttF = new AttaqueFeu(90,60);
 		mediumAttF.setNom("Attaque Feu Medium");
 		//Je crée une liste d'attaques et j'ajoute les attaques
-		List<Attaque> listMage = new ArrayList<>();
+		List<IAttaque> listMage = new ArrayList<>();
 		listMage.add(attFeu);
 		listMage.add(mediumAttF);
 		listMage.add(basAtt);
@@ -78,7 +87,7 @@ public class Monde {
 	* Demande a l'utilisateur d'entrer le nom du personnage.
 	* retour: une instance de la classe Personnage correctement instancié.
 	**/
-	public static Personnage personnageFactory(){
+	public static ICombattant personnageFactory(){
 	// Demander a l'utilisateur un nom de personnage
 	// Créer un nouveau personnage en utilisant le constructeur
 	// avec tous ses params (dont le nom qui vient d'etre choisie par l'utilisateur)
@@ -129,7 +138,7 @@ public class Monde {
 	* Demande a l'utilisateur d'entrer le nom du monstre.
 	* retour: une instance de la classe Monstre correctement instancié.
 	**/
-	public static Monstre monstreFactory(){
+	public static ICombattant monstreFactory(){
 	// Demander a l'utilisateur un nom de monstre
 	// Créer un nouveau monstre en utilisant le constructeur
 	// avec tous ses params (dont le nom qui vient d'etre choisie par l'utilisateur)
@@ -157,7 +166,6 @@ public class Monde {
 		//List<String> list = Arrays.asList("Chat","Chien","Chaton", "Canard", "Lapin", "Poussin", "Poule");
 		String[] finNom = {" Mechant"," De Feu"," De La Mort", " Du Demon", " Du Jugement Dernier", " Pendragon", " Des Enfers"};
 		
-		List<String> list = Arrays.asList("Chat","Chien","Chaton", "Canard", "Lapin", "Poussin", "Poule");
 		//je récupère deux index au hasard
 		int index1 = new Random().nextInt(debutNom.length);
 		int index2 = new Random().nextInt(finNom.length);
@@ -171,9 +179,9 @@ public class Monde {
 	 * @param nombre
 	 * @return
 	 */
-	public static List<Combattant> groupeMonstreFactory(int nombre) {
+	public static List<ICombattant> groupeMonstreFactory(int nombre) {
 		//ma liste des résultats
-		List<Combattant> res = new ArrayList<>();
+		List<ICombattant> res = new ArrayList<>();
 		//j'en crée nombre fois
 		for(int i=0; i<nombre; i++) {
 			res.add(monstreFactory());
@@ -186,9 +194,9 @@ public class Monde {
 	 * @param nombre
 	 * @return
 	 */
-	public static List<Combattant> groupePersonnageFactory(int nombre){
+	public static List<ICombattant> groupePersonnageFactory(int nombre){
 		//ma liste des résultats
-		List<Combattant> res = new ArrayList<>();
+		List<ICombattant> res = new ArrayList<>();
 		//j'en crée nombre fois
 		for(int i=0; i<nombre; i++) {
 			res.add(personnageFactory());
@@ -202,7 +210,7 @@ public class Monde {
 	 * @param combattant1
 	 * @param combattant2
 	 */
-	public static void combat(Combattant combattant1, Combattant combattant2){
+	public static void combat(ICombattant combattant1, ICombattant combattant2){
 		
 		//PRésentation des combattants
 		System.out.println("Le COMBAT COMMENCE entre " + combattant1 + " et " + combattant2);
@@ -229,7 +237,7 @@ public class Monde {
 					leJeuContinue = false;
 				}
 				//sinon on change d'attaquant
-				pileFace = false;
+				//pileFace = false;
 			}else {
 				//le monstre attaque le perso
 				System.out.print("\n" + combattant2.getNom() + " ATTAQUE " + combattant1.getNom());
@@ -241,10 +249,13 @@ public class Monde {
 					
 					leJeuContinue = false;
 				}
-				//Sinon on change d'attaquant
-				pileFace = true;
+				//on change d'attaquant
+				pileFace = !pileFace;
+				scan.nextLine();
 			}
+			
 		}
+		scan.close();
 	}
 	
 	
@@ -258,7 +269,7 @@ public class Monde {
 		System.out.println("				2. Lancer un combat de groupe");
 		System.out.println("				3. One vs World Hardcore Edition");
 		System.out.println("				4. Informations");
-		System.out.println("				5. Exit");
+		System.out.println("				5. Quitter");
 		System.out.println("		-------------------------------------------------------------------------------------------------------------------");
 		System.out.println(">>>");
 		int option = Tools.inputInt("");
@@ -267,7 +278,7 @@ public class Monde {
 			case 2 : System.out.println("combatGroupe()"); break;
 			case 3 : System.out.println("combat1vWorld"); break;
 			case 4 : System.out.println("Game developped by Vincent Debuisson	"); break;
-			case 5 : System.exit(0);
+			case 5 : System.out.println("A bientot"); System.exit(0);
 			default : {
 				System.out.println("chiffre non valide");
 				menu();
@@ -293,7 +304,7 @@ public class Monde {
 	/**
 	 * Lance les combats de groupe
 	 */
-	public void combatGroupe() {
+	public static void combatGroupe() {
 		
 		System.out.println("				Bienvenu aux combats de groupes ");
 		System.out.println("		-------------------------------------------------------------------------------------------------------------------");
@@ -301,15 +312,20 @@ public class Monde {
 		System.out.println("		-------------------------------------------------------------------------------------------------------------------");
 		System.out.println(">>>");
 		int nombreMonstre = Tools.inputInt(null);
+		Groupe mesMonstres = new Groupe(groupeMonstreFactory(nombreMonstre), "Le groupe des monstres");
+		
 		System.out.println("				Combien de personnages contiendra votre groupe ? ");
 		System.out.println("		-------------------------------------------------------------------------------------------------------------------");
 		System.out.println(">>>");
 		int nombrePerso = Tools.inputInt(null);
-			
-		Groupe mesMonstres = new Groupe(groupeMonstreFactory(nombreMonstre), "Le groupe des monstres");
-		List<Combattant> mesPerso = groupePersonnageFactory(nombrePerso);
+		Groupe mesPerso = new Groupe(groupePersonnageFactory(nombrePerso), "le groupe de personnages");
 		
-		while(mesMonstres.e)
+		//tant que le groupe monstre est vivant ET le groupe perso est vivant
+		//je vais prendre un membre au hasard dans chaque groupe et les faire s'attaquer avec la méthode combat
+		//à la fin je mets un message pour afficher le vainqueur
+		while(!mesMonstres.estMort() && !mesPerso.estMort()) {
+			
+		}
 		
 	}
 	

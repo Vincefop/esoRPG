@@ -3,18 +3,18 @@ package fr.rpg.classes;
 import java.util.List;
 import java.util.Random;
 
-import fr.rpg.comportement.Attaque;
+import fr.rpg.comportement.IAttaque;
 
 public class Classe {
 	
 	private String nom;
-	private List<Attaque> listAttaque; // liste des attaques propres à la classe choisie
+	private List<IAttaque> listAttaque; // liste des attaques propres à la classe choisie
 	
 	
 	public Classe() {
 		super();
 	}
-	public Classe(String nom, List<Attaque> listAttaque) {
+	public Classe(String nom, List<IAttaque> listAttaque) {
 		super();
 		this.setNom(nom);
 		this.setListAttaque(listAttaque);
@@ -24,10 +24,10 @@ public class Classe {
 	 * recuperer une attaque aléatoire parmis la liste d'attaques  et la renvoie
 	 * @return une attaque aleatoire
 	 */
-	public Attaque getAttaque() {
+	public IAttaque getAttaque() {
 		
 		int index = new Random().nextInt(listAttaque.size());
-		Attaque attaque = this.getListAttaque().get(index);
+		IAttaque attaque = this.getListAttaque().get(index);
 		return attaque;
 	}
 
@@ -48,14 +48,14 @@ public class Classe {
 	/**
 	 * @return the listAttaque
 	 */
-	public List<Attaque> getListAttaque() {
+	public List<IAttaque> getListAttaque() {
 		return listAttaque;
 	}
 
 	/**
 	 * @param listAttaque the listAttaque to set
 	 */
-	public void setListAttaque(List<Attaque> listAttaque) {
+	public void setListAttaque(List<IAttaque> listAttaque) {
 		this.listAttaque = listAttaque;
 	}
 	

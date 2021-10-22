@@ -3,12 +3,12 @@ package fr.rpg.individus;
 import java.util.List;
 import java.util.Random;
 
-import fr.rpg.comportement.Attaque;
+import fr.rpg.comportement.IAttaque;
 
-public class Groupe implements Combattant{
+public class Groupe implements ICombattant{
 
 	//list des combattants
-	private List<Combattant> listCombattant;
+	private List<ICombattant> listCombattant;
 	private String nomDuGroupe;
 	private int pointDeVieDuGroupe;
 	
@@ -22,7 +22,7 @@ public class Groupe implements Combattant{
 	 * Constructeur param 
 	 * @param listCombattant
 	 */
-	public Groupe(List<Combattant> listCombattant) {
+	public Groupe(List<ICombattant> listCombattant) {
 		this();
 		this.listCombattant = listCombattant;
 	}
@@ -30,7 +30,7 @@ public class Groupe implements Combattant{
 	 * Constructeur param 
 	 * @param listCombattant
 	 */
-	public Groupe(List<Combattant> listCombattant, String nom) {
+	public Groupe(List<ICombattant> listCombattant, String nom) {
 		this(listCombattant, nom, -1);
 	}
 	/**
@@ -39,7 +39,7 @@ public class Groupe implements Combattant{
 	 * @param nomDuGroupe
 	 * @param pointDeVieDuGroupe
 	 */
-	public Groupe(List<Combattant> listCombattant, String nomDuGroupe, int pointDeVieDuGroupe) {
+	public Groupe(List<ICombattant> listCombattant, String nomDuGroupe, int pointDeVieDuGroupe) {
 		super();
 		this.setListCombattant(listCombattant);
 		this.setNom(nomDuGroupe); 
@@ -55,7 +55,7 @@ public class Groupe implements Combattant{
 	 * ajouter un combattant à la liste
 	 * @param unCombattant
 	 */
-	public void addCombattant(Combattant combat) {
+	public void addCombattant(ICombattant combat) {
 		listCombattant.add(combat);
 	}
 	
@@ -75,23 +75,23 @@ public class Groupe implements Combattant{
 	 * choisie un Combattant aléatoire du groupe qui attaque le groupe ennemi 
 	 */
 	@Override
-	public void attaquer(Combattant defenseur) {
+	public void attaquer(ICombattant defenseur) {
 		int index = new Random().nextInt(this.getListCombattant().size());
-		Combattant attaquant = this.getListCombattant().get(index);
+		ICombattant attaquant = this.getListCombattant().get(index);
 		System.out.println(""+ attaquant.getNom() + " attaque pour " + this.getNom());
 		
 		
 		//CODE DE PERSONNAGES
 		if(attaquant instanceof Personnage) {
 			//récupère une attaque random dans la liste de la classe
-			Attaque randAttaque = ((Personnage) attaquant).getClasse().getAttaque();
+			IAttaque randAttaque = ((Personnage) attaquant).getClasse().getAttaque();
 			System.out.println(" avec " + randAttaque.getNom() + "(" + randAttaque.getDegats() + " degats)");
 			//récupère si ses chances de toucher lui permet des dégats à infliger
 			int degat = randAttaque.lancerAttaque(this, defenseur);
 			//change les points de vie du défenseur
 			if(degat!=0)
 				defenseur.defendre(degat);
-		//CODE DE MONSTRES
+		//CODE DE MONSTRES SI JAMAIS IL FALLAIT
 		}else if(attaquant instanceof Monstre) {
 			attaquant.attaquer(defenseur);
 		}
@@ -104,7 +104,7 @@ public class Groupe implements Combattant{
 	@Override
 	public void defendre(int degats) {
 		boolean isDead = true;
-		Combattant defenseur = null;
+		ICombattant defenseur = null;
 		//tant que l'attaquand est mort je vais continuer à prendre un Combattant aléatoire
 		while(isDead) {
 			int index = new Random().nextInt(this.getListCombattant().size());
@@ -142,7 +142,7 @@ public class Groupe implements Combattant{
 	public void setPointDeVie(int pdv) {
 		pdv = 0;
 		if(!this.getListCombattant().isEmpty()) {
-			for (Combattant combattant : listCombattant) {
+			for (ICombattant combattant : listCombattant) {
 				pdv += combattant.getPointDeVie();
 			}
 		}else
@@ -152,13 +152,13 @@ public class Groupe implements Combattant{
 	/**
 	 * @return the listCombattant
 	 */
-	public List<Combattant> getListCombattant() {
+	public List<ICombattant> getListCombattant() {
 		return listCombattant;
 	}
 	/**
 	 * @param listCombattant the listCombattant to set
 	 */
-	public void setListCombattant(List<Combattant> listCombattant) {
+	public void setListCombattant(List<ICombattant> listCombattant) {
 		this.listCombattant = listCombattant;
 	}
 	

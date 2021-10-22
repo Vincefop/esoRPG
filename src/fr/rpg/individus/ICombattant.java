@@ -1,6 +1,6 @@
 package fr.rpg.individus;
 
-public interface Combattant
+public interface ICombattant
 {
 	/**
 	 * Permet au combattant d'attaquer 
@@ -8,7 +8,7 @@ public interface Combattant
 	 * soit en utilisant la liste d' attaques disponible dans la classe de chaque personnage
 	 * @param defenseur
 	 */
-	public void attaquer(Combattant defenseur);
+	public void attaquer(ICombattant defenseur);
 	/**
 	 * Permet au combattant de perdre des points de vie quand il se fait attaquer
 	 * @param degats
@@ -30,11 +30,15 @@ public interface Combattant
 	 */
 	public int getPointDeVie();
 	/**
-	 * changer les points de vie
+	 * changer les points de vie du Combattant
 	 * @param pdv
 	 */
 	public void setPointDeVie(int pdv);
-	
+	/**
+	 * retourne vrai si les points de vie sont égal ou inf à 0
+	 * @return
+	 */
+	//public boolean estMort();
 	
 	
 }

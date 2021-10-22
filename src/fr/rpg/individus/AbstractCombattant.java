@@ -1,6 +1,6 @@
 package fr.rpg.individus;
 
-public abstract class AbstractCombattant implements Combattant{
+public abstract class AbstractCombattant implements ICombattant{
 	
 	
 	//ATTRIBUTS
@@ -26,7 +26,7 @@ public abstract class AbstractCombattant implements Combattant{
 	 * 
 	 * @param absC
 	 */
-	public abstract void attaquer(Combattant defenseur);
+	public abstract void attaquer(ICombattant defenseur);
 	
 	
 	

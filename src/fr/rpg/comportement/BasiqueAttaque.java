@@ -4,7 +4,7 @@ import java.util.Random;
 
 import fr.rpg.individus.*;
 
-public class BasiqueAttaque implements Attaque{
+public class BasiqueAttaque implements IAttaque{
 
 	private String nom;
 	private int chanceDeToucher;
@@ -33,7 +33,7 @@ public class BasiqueAttaque implements Attaque{
 	 * @param cible
 	 */
 	@Override
-	public int lancerAttaque(Combattant lanceur, Combattant cible) {
+	public int lancerAttaque(ICombattant lanceur, ICombattant cible) {
 		//le res
 		int res = 0;
 		//nombre aleatoire ou chance de toucher en pourcentage
